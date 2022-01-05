@@ -4,7 +4,7 @@ class Movie {
   }
 
   /**
-   * the cross check with favourite list exist with the selected movie
+   * to cross check with favourite list with the selected movie
    * @param { string }  title   fulltitle from the API
    * @returns integer
    */
@@ -13,7 +13,7 @@ class Movie {
   }
 
   /**
-   *
+   * clear the selected title from the favourite list
    * @param { string }  title   fulltitle from the API
    * @returns <Array<any>>
    */
