@@ -8,8 +8,8 @@ class Movie {
    * @param { string }  title   fulltitle from the API
    * @returns integer
    */
-  checkFavourite(title) {
-    return this.favourites.findIndex(({ fullTitle }) => fullTitle === title);
+  checkFavourite(titleId) {
+    return this.favourites.findIndex(({ id }) => id === titleId);
   }
 
   /**

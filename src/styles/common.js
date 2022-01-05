@@ -14,14 +14,18 @@ export default StyleSheet.create({
   flexCenter: {
     ...baseStyle,
   },
+  basicPadding: {
+    paddingBottom: 16,
+    paddingHorizontal: 24,
+  },
   wrapContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    paddingTop: 16,
+    paddingBottom: 80,
     paddingHorizontal: 8,
   },
   image: {
-    width: "95%",
+    width: "100%",
     height: 120,
   },
   banner: {

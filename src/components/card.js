@@ -1,27 +1,23 @@
 import React from "react";
-import { Text, Pressable, ActivityIndicator } from "react-native";
-import { Image } from "react-native-elements";
-
+import { Text } from "react-native";
+import { Card } from "react-native-elements";
 import common from "../styles/common";
 import card from "../styles/card";
 
 const MovieCard = ({ method, ...others }) => {
   return (
-    <Pressable
-      {...{
-        onPress: () => method(),
-        style: card.movie,
-      }}>
-      <Image
+    <Card {...{ containerStyle: card.movie }}>
+      <Card.Title {...{ style: { height: "20%" } }}>{others.title}</Card.Title>
+      <Card.Image {...{ style: common.image, source: { uri: others.image } }} />
+
+      <Text
         {...{
-          source: { uri: others.image },
-          containerStyle: common.image,
-          PlaceholderContent: <ActivityIndicator />,
-        }}
-      />
-      <Text>{others.title}</Text>
-      <Text>{others.description}</Text>
-    </Pressable>
+          style: { textAlign: "center", paddingTop: 16, color: "#ee7202" },
+          onPress: () => method(),
+        }}>
+        View Details
+      </Text>
+    </Card>
   );
 };
 

@@ -27,15 +27,15 @@ const DetailsScreen = ({
   }, []);
 
   function _onHandleButton() {
-    const { image, fullTitle } = data;
-    const params = { image, fullTitle };
+    const { imDbRating, fullTitle, id } = data;
+    const params = { imDbRating, fullTitle, id };
     // console.log(params);
     getStore().dispatch(addMovie(params));
     navigate("Favourite");
   }
 
   function _onFindMovie() {
-    const index = MovieObj.checkFavourite(data.fullTitle);
+    const index = MovieObj.checkFavourite(id);
     // console.log(index);
     setShow(index === -1 ? true : false);
   }
@@ -43,11 +43,11 @@ const DetailsScreen = ({
   const movieDetails = [
     { key: "Banner", image: data.image, type: "image" },
     { key: "Full Title", caption: data.fullTitle, type: "word" },
-    { key: "Tagline", caption: data.tagline, type: "word" },
+    { key: "Tagline", caption: data.tagline || "-", type: "word" },
     { key: "Type", caption: data.type, type: "word" },
-    { key: "Plot", caption: data.plot, type: "word" },
-    { key: "Duration", caption: data.runtimeStr, type: "word" },
-    { key: "Awards", caption: data.awards, type: "word" },
+    { key: "Plot", caption: data.plot || "-", type: "word" },
+    { key: "Duration", caption: data.runtimeStr || "-", type: "word" },
+    { key: "Awards", caption: data.awards || "-", type: "word" },
     { key: "Directors", caption: data.directors, type: "word" },
     { key: "Stars", caption: data.stars, type: "word" },
     { key: "Genres", caption: data.genres, type: "word" },
@@ -55,7 +55,14 @@ const DetailsScreen = ({
     { key: "Rating", caption: data.imDbRating, type: "word" },
   ];
 
-  if (isLoading) return <ActivityIndicator />;
+  if (isError)
+    return (
+      <Text {...{ style: { textAlign: "center", paddingTop: 16 } }}>
+        Opps, something went wrong, kindly retry
+      </Text>
+    );
+  if (isLoading)
+    return <ActivityIndicator {...{ style: { paddingTop: 16 } }} />;
   return (
     <ScrollView>
       {movieDetails.map(({ key, caption, image, type }) => {
