@@ -8,6 +8,7 @@ import common from "../styles/common";
 import form from "../styles/form";
 
 const { View, TextInput, ScrollView, ActivityIndicator, Text } = UI;
+const controller = new AbortController();
 
 const HomeScreen = ({ navigation: { navigate }, movies }) => {
   const [keyword, setKeyword] = useState(null);
@@ -16,6 +17,7 @@ const HomeScreen = ({ navigation: { navigate }, movies }) => {
   useEffect(() => {
     return () => {
       getStore().dispatch(resetFetchMovies());
+      controller.abort();
     };
   }, []);
 
