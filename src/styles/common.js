@@ -18,10 +18,18 @@ export default StyleSheet.create({
     paddingBottom: 16,
     paddingHorizontal: 24,
   },
+  basicCenteredText: {
+    textAlign: "center",
+    paddingTop: 16,
+  },
+  basicLayoutPadding: {
+    paddingBottom: 24,
+    paddingHorizontal: 24,
+  },
   wrapContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
-    paddingBottom: 80,
+    paddingBottom: 48,
     paddingHorizontal: 8,
   },
   image: {
@@ -34,7 +42,7 @@ export default StyleSheet.create({
     marginBottom: 24,
   },
   button: {
-    backgroundColor: "#ee7202",
+    backgroundColor: "#008080",
     padding: 16,
     margin: 8,
     alignItems: "center",

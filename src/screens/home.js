@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import * as UI from "react-native";
 import { connect } from "react-redux";
 import { getStore } from "../redux/config";
@@ -20,24 +20,28 @@ const HomeScreen = ({ navigation: { navigate }, movies }) => {
   }, []);
 
   function _onFetchMovies() {
+    /* prevent null keyword from performing request */
     if (!keyword) return;
     getStore().dispatch(getMoviesByTitle(keyword));
+
+    /* assist showing empty results after submit request */
     setRequested(prev => !prev);
   }
 
   function _onHandleNullResponse() {
-    return movies?.lists.length === 0 && isRequested && !movies?.isLoading;
+    const { lists, isLoading, isError } = movies;
+    return lists.length === 0 && isRequested && !isLoading && !isError;
   }
 
   return (
-    <View>
+    <Fragment>
       <TextInput
         {...{
           value: keyword,
           onChangeText: text => setKeyword(text),
           placeholder: "e.g. Venom",
           style: form.searchBar,
-          placeholderTextColor: "#c4c4c4",
+          placeholderTextColor: "#808080",
           returnKeyType: "search",
           clearButtonMode: "always",
           onSubmitEditing: _onFetchMovies,
@@ -45,12 +49,12 @@ const HomeScreen = ({ navigation: { navigate }, movies }) => {
       />
       {movies?.isLoading && <ActivityIndicator />}
       {_onHandleNullResponse() && (
-        <Text {...{ style: { textAlign: "center", paddingTop: 16 } }}>
+        <Text {...{ style: common.basicCenteredText }}>
           Sorry, there is no result that title
         </Text>
       )}
       {movies?.isError && (
-        <Text {...{ style: { textAlign: "center", paddingTop: 16 } }}>
+        <Text {...{ style: common.basicCenteredText }}>
           Opps, something went wrong, kindly retry
         </Text>
       )}
@@ -70,7 +74,7 @@ const HomeScreen = ({ navigation: { navigate }, movies }) => {
           ))}
         </View>
       </ScrollView>
-    </View>
+    </Fragment>
   );
 };
 

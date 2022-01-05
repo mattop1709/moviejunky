@@ -35,6 +35,7 @@ const DetailsScreen = ({
   }
 
   function _onFindMovie() {
+    /* get the index (if any) for movie inside the favourite basket */
     const index = MovieObj.checkFavourite(id);
     // console.log(index);
     setShow(index === -1 ? true : false);
@@ -52,12 +53,12 @@ const DetailsScreen = ({
     { key: "Stars", caption: data.stars, type: "word" },
     { key: "Genres", caption: data.genres, type: "word" },
     { key: "Companies", caption: data.companies, type: "word" },
-    { key: "Rating", caption: data.imDbRating, type: "word" },
+    { key: "Rating", caption: data.imDbRating || "-", type: "word" },
   ];
 
   if (isError)
     return (
-      <Text {...{ style: { textAlign: "center", paddingTop: 16 } }}>
+      <Text {...{ style: common.basicCenteredText }}>
         Opps, something went wrong, kindly retry
       </Text>
     );
@@ -79,9 +80,10 @@ const DetailsScreen = ({
         }
 
         return (
-          <View
-            {...{ key, style: { paddingBottom: 16, paddingHorizontal: 24 } }}>
-            <Text>{key}</Text>
+          <View {...{ key, style: common.basicLayoutPadding }}>
+            <Text {...{ style: { paddingBottom: 4, color: "#808080" } }}>
+              {key}
+            </Text>
             <Text {...{ style: { lineHeight: 18 } }}>{caption}</Text>
           </View>
         );
@@ -93,7 +95,7 @@ const DetailsScreen = ({
             onPress: _onHandleButton,
             style: common.button,
           }}>
-          <Text>Add To Favourite</Text>
+          <Text {...{ style: { color: "#fff" } }}>Add To Favourite</Text>
         </TouchableOpacity>
       )}
     </ScrollView>

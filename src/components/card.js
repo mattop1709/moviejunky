@@ -7,12 +7,15 @@ import card from "../styles/card";
 const MovieCard = ({ method, ...others }) => {
   return (
     <Card {...{ containerStyle: card.movie }}>
-      <Card.Title {...{ style: { height: "20%" } }}>{others.title}</Card.Title>
+      <Card.Title {...{ style: { height: "20%" } }}>
+        {others.title}
+        {"\n"}
+        {others.description}
+      </Card.Title>
       <Card.Image {...{ style: common.image, source: { uri: others.image } }} />
-
       <Text
         {...{
-          style: { textAlign: "center", paddingTop: 16, color: "#ee7202" },
+          style: { textAlign: "center", paddingTop: 16, color: "#008080" },
           onPress: () => method(),
         }}>
         View Details
