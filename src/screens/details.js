@@ -9,6 +9,7 @@ import common from "../styles/common";
 import Movie from "../utils/movie";
 
 const { Text, View, ActivityIndicator, ScrollView, TouchableOpacity } = UI;
+const controller = new AbortController();
 
 const DetailsScreen = ({
   route: { params },
@@ -24,6 +25,10 @@ const DetailsScreen = ({
   useEffect(() => {
     getStore().dispatch(getMoviesDetails(id));
     _onFindMovie();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   function _onHandleButton() {

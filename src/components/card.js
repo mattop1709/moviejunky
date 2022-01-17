@@ -7,7 +7,7 @@ import card from "../styles/card";
 const MovieCard = ({ method, ...others }) => {
   return (
     <Card {...{ containerStyle: card.movie }}>
-      <Card.Title {...{ style: { height: "20%" } }}>
+      <Card.Title {...{ style: { height: "20%" }, numberOfLines: 2 }}>
         {others.title}
         {"\n"}
         {others.description}

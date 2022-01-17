@@ -1,6 +1,8 @@
 import Config from "react-native-config";
 
 const { BASE_URL, API_KEY } = Config;
+const controller = new AbortController();
+const signal = controller.signal;
 
 /**
  * fetch all movies based on title
@@ -10,7 +12,7 @@ const { BASE_URL, API_KEY } = Config;
 export async function fetchMovies(title) {
   try {
     const response = await (
-      await fetch(`${BASE_URL}/SearchMovie/${API_KEY}/${title}`)
+      await fetch(`${BASE_URL}/SearchMovie/${API_KEY}/${title}`, { signal })
     ).json();
 
     if (response.results) {
@@ -36,7 +38,9 @@ export async function fetchMovies(title) {
 export async function fetchMovieDetaild(titleId) {
   try {
     const response = await (
-      await fetch(`${BASE_URL}/Title/${API_KEY}/${titleId}/FullActor`)
+      await fetch(`${BASE_URL}/Title/${API_KEY}/${titleId}/FullActor`, {
+        signal,
+      })
     ).json();
 
     if (response.errorMessage) {

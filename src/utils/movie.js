@@ -4,8 +4,8 @@ class Movie {
   }
 
   /**
-   * the cross check with favourite list exist with the selected movie
-   * @param { string }  title   fulltitle from the API
+   * to cross check with favourite list with the selected movie
+   * @param { string }  titleId   titleId from the API
    * @returns integer
    */
   checkFavourite(titleId) {
@@ -13,9 +13,9 @@ class Movie {
   }
 
   /**
-   *
+   * clear the selected title from the favourite list
    * @param { string }  title   fulltitle from the API
-   * @returns <Array<any>>
+   * @returns Array<any>
    */
   removeFavourite(title) {
     return this.favourites.filter(({ fullTitle }) => fullTitle !== title);
