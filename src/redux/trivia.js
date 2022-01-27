@@ -1,12 +1,15 @@
 import { fetchTrivia } from "../api/trivia";
+import Trivia from "../utils/trivia";
 
 export const NAMESPACE = `trivia`;
 export const FETCH_TRIVIA_QUESTIONS = `${NAMESPACE}/FETCH_TRIVIA_QUESTIONS`;
 export const UPDATE_QUESTIONS_SUCCESS = `${NAMESPACE}/UPDATE_QUESTIONS_SUCCESS`;
 export const UPDATE_QUESTIONS_ERROR = `${NAMESPACE}/UPDATE_QUESTIONS_ERROR`;
+export const SET_DIFFICULTY = `${NAMESPACE}/SET_DIFFICULTY`;
 
 const initialState = {
   data: [],
+  difficulty: "hard",
   isLoading: false,
   isError: false,
 };
@@ -21,8 +24,21 @@ export const getTriviaQuestions = difficulty => async dispatch => {
   }
 
   if (typeof response === "object") {
-    dispatch({ type: UPDATE_QUESTIONS_SUCCESS, payload: response });
+    let stack = [];
+    response.forEach(trivia => {
+      const triviaObj = new Trivia([
+        ...trivia.incorrect_answers,
+        trivia.correct_answer,
+      ]);
+      const answers = triviaObj.shuffledAnswers;
+      stack.push({ ...trivia, answers });
+    });
+    dispatch({ type: UPDATE_QUESTIONS_SUCCESS, payload: stack });
   }
+};
+
+export const setTriviaDifficulty = difficulty => {
+  return { type: SET_DIFFICULTY, payload: difficulty };
 };
 
 export default (state = initialState, action = {}) => {
@@ -30,9 +46,11 @@ export default (state = initialState, action = {}) => {
     case FETCH_TRIVIA_QUESTIONS:
       return { ...initialState, isLoading: true };
     case UPDATE_QUESTIONS_SUCCESS:
-      return { data: action.payload, isLoading: true, isError: false };
+      return { data: action.payload, isLoading: false, isError: false };
     case UPDATE_QUESTIONS_ERROR:
       return { ...initialState, isError: true };
+    case SET_DIFFICULTY:
+      return { ...initialState, difficulty: action.payload };
     default:
       return state;
   }

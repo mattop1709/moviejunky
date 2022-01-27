@@ -24,10 +24,18 @@ export function useTimer(second) {
     };
   }, [countDown]);
 
+  /**
+   * serve to commence the timer, suitable for any situations
+   * i.e. using side effects or user fire events
+   */
   function initiate() {
     setCountDown(second);
   }
 
+  /**
+   * straight forward method, very handy to provide control
+   * to the component in stop the timer
+   */
   function reset() {
     setCountDown(0);
   }

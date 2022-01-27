@@ -8,4 +8,4 @@ class Trivia {
   }
 }
 
-export default new Trivia();
+export default Trivia;
