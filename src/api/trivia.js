@@ -9,7 +9,7 @@ export async function fetchTrivia(difficulty) {
     const response = await (await fetch(url, { signal })).json();
 
     if (response) {
-      console.log(response.results);
+      // console.log(response.results);
       return response.results;
     }
   } catch (error) {}
