@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Tab from "./tab";
 import DetailsScreen from "../screens/details";
+import TriviaQuestionScreen from "../screens/question";
 
 /**
  * @const   screens   place all screens inside this object with <name> : <component name>
@@ -10,6 +11,7 @@ import DetailsScreen from "../screens/details";
 const screens = {
   Movie: Tab,
   Details: DetailsScreen,
+  Question: TriviaQuestionScreen,
 };
 
 const { Navigator, Screen } = createNativeStackNavigator();

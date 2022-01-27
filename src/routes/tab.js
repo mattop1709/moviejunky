@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import HomeScreen from "../screens/home";
 import Favourite from "../screens/favourite";
+import TriviaScreen from "../screens/trivia";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -13,6 +14,7 @@ const { Navigator, Screen } = createBottomTabNavigator();
 const screens = {
   Home: HomeScreen,
   Favourite,
+  Trivia: TriviaScreen,
 };
 
 const Tab = () => {
@@ -27,6 +29,7 @@ const Tab = () => {
               const icon = {
                 Home: require("../../assets/home.png"),
                 Favourite: require("../../assets/heart.png"),
+                Trivia: require("../../assets/star.png"),
               };
               return icon[args];
             }
