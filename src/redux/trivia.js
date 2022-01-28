@@ -50,7 +50,7 @@ export const resetTrivia = () => {
 export default (state = initialState, action = {}) => {
   switch (action.type) {
     case FETCH_TRIVIA_QUESTIONS:
-      return { ...initialState, isLoading: true };
+      return { ...state, isLoading: true, isError: false };
     case UPDATE_QUESTIONS_SUCCESS:
       return {
         ...state,

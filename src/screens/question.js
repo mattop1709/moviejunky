@@ -1,23 +1,63 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  Animated,
+} from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { getTriviaQuestions, resetTrivia } from "../redux/trivia";
 import { useTimer } from "../hooks/use-timer";
 import { toTimeFormat } from "../utils/convertor";
 
 const TOTAL_QUESTIONS = 10;
+const QUIZ_TIMER = 100;
 
 const TriviaQuestionScreen = ({ navigation: { navigate } }) => {
   const dispatch = useDispatch();
-  const [timer, { initiate, _ }] = useTimer(300);
+  const [timer, { initiate, reset }] = useTimer(QUIZ_TIMER);
   const [disabled, setDisabled] = useState(false);
   const [questionNumber, setQuestionNumber] = useState(0);
   const [correctAnswer, setCorrectAnswer] = useState(0);
-  const { data, isLoading } = useSelector(state => state.trivia);
+  const { data, isLoading, ...others } = useSelector(state => state.trivia);
+
+  const counter = useRef(new Animated.Value(0)).current;
+  const countInterval = useRef(null);
+  const [count, setCount] = useState(timer);
+
+  const load = count => {
+    Animated.timing(counter, {
+      toValue: count,
+      duration: 1000,
+      useNativeDriver: false,
+    }).start();
+  };
+
+  const width = counter.interpolate({
+    inputRange: [0, QUIZ_TIMER],
+    outputRange: ["0%", "100%"],
+    extrapolate: "clamp",
+  });
 
   useEffect(() => {
     dispatch(getTriviaQuestions());
+    countInterval.current = setInterval(() => setCount(old => old - 1), 1000);
+    return () => {
+      clearInterval(countInterval);
+      reset();
+      setCount(0);
+    };
   }, []);
+
+  useEffect(() => {
+    load(count);
+    if (count >= QUIZ_TIMER) {
+      setCount(QUIZ_TIMER);
+      clearInterval(countInterval);
+    }
+  }, [count]);
 
   useEffect(() => {
     if (timer === 0) return _onClickNext();
@@ -37,6 +77,10 @@ const TriviaQuestionScreen = ({ navigation: { navigate } }) => {
       /&#039;|&quot;|&amp;|&grave;|&ldquo;|&rdquo;/g,
       symbol => char[symbol],
     );
+  }
+
+  function _onUppercaseLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   function _onHandleResult() {
@@ -61,6 +105,7 @@ const TriviaQuestionScreen = ({ navigation: { navigate } }) => {
     setQuestionNumber(number => number + 1);
     setDisabled(false);
     initiate();
+    setCount(QUIZ_TIMER);
   }
 
   function _onCancelTrivia() {
@@ -71,26 +116,27 @@ const TriviaQuestionScreen = ({ navigation: { navigate } }) => {
   if (isLoading) return <Text>Loading</Text>;
   return (
     <View {...{ style: { flex: 1, backgroundColor: "#008080" } }}>
-      <View style={{ height: "20%" }}>
+      {/* header */}
+      <View style={{ height: "5%", width: "100%", alignItems: "flex-end" }}>
         <TouchableOpacity
-          style={{ paddingRight: 24, paddingTop: 24, alignItems: "flex-end" }}
+          style={{
+            paddingRight: 24,
+            paddingTop: 24,
+          }}
           onPress={_onCancelTrivia}>
           <Image
             source={require("../../assets/home-white.png")}
             style={{ height: 24, width: 24 }}
           />
         </TouchableOpacity>
-        <Text>Welcome Trivia Question</Text>
-        <Text>
-          Total Questions {questionNumber + 1}/{TOTAL_QUESTIONS}
-        </Text>
-        <Text>Current Score {_onHandleResult()}</Text>
       </View>
+      {/* header */}
 
+      {/* body */}
       <View
         {...{
           style: {
-            height: "20%",
+            height: "85%",
             justifyContent: "center",
           },
         }}>
@@ -103,43 +149,106 @@ const TriviaQuestionScreen = ({ navigation: { navigate } }) => {
             borderRadius: 8,
             justifyContent: "center",
           }}>
-          <Text style={{ textAlign: "center" }}>
-            {_onHandleText(data[questionNumber]?.question) ?? ""}
-          </Text>
+          {/* info */}
+          <View style={{ flex: 0.3 }}>
+            <View style={{ flex: 4 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  top: 8,
+                  flex: 0.3,
+                  backgroundColor: "",
+                }}>
+                <Text style={{ color: "#7D8182" }}>
+                  Score {_onHandleResult()}
+                </Text>
+                <Text style={{ color: "#7D8182" }}>
+                  {_onUppercaseLetter(others.difficulty)}
+                </Text>
+              </View>
+              <View
+                style={{
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flex: 0.7,
+                }}>
+                <View
+                  style={{
+                    backgroundColor: "#808000",
+                    padding: 8,
+                    borderRadius: 16,
+                  }}>
+                  <Text>Question {questionNumber + 1}</Text>
+                </View>
+              </View>
+            </View>
+            <View style={{ flex: 6, justifyContent: "center" }}>
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  color: "#4E4B4E",
+                  fontSize: 16,
+                }}>
+                {_onHandleText(data[questionNumber]?.question) ?? ""}
+              </Text>
+            </View>
+          </View>
+          {/* info */}
+
+          {/* question */}
+          <View style={{ flex: 0.6, justifyContent: "center" }}>
+            {data[questionNumber]?.answers.map(answer => (
+              <TouchableOpacity
+                key={answer}
+                style={{
+                  borderWidth: 1,
+                  borderColor: "#00B3B3",
+                  height: 56,
+                  marginTop: 16,
+                  padding: 16,
+                  borderRadius: 24,
+                  justifyContent: "center",
+                }}
+                onPress={() => _onSelectAnswer(answer)}>
+                <Text
+                  style={{ textAlign: "center", color: "#4E4B4E" }}
+                  disabled={disabled}>
+                  {_onHandleText(answer)}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          {/* question */}
+
+          {/* timer */}
+          <View
+            style={{
+              flex: 0.1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}>
+            <Text style={{ color: "#BB6844" }}>
+              Remaining Time : {toTimeFormat(timer)}
+            </Text>
+          </View>
+
+          {/* timer */}
         </View>
       </View>
+      {/* body */}
 
-      <View style={{ marginHorizontal: 24, height: "40%" }}>
-        {data[questionNumber]?.answers.map(answer => (
-          <TouchableOpacity
-            key={answer}
-            style={{
-              backgroundColor: "#00B3B3",
-              height: 56,
-              marginTop: 16,
-              padding: 16,
-              borderRadius: 8,
-              justifyContent: "center",
-            }}
-            onPress={() => _onSelectAnswer(answer)}>
-            <Text key={answer} disabled={disabled}>
-              {_onHandleText(answer)}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-
+      {/* footer */}
       <View
         {...{
           style: {
-            flexDirection: "row",
+            height: "10%",
             flex: 1,
-            justifyContent: "space-between",
             alignItems: "center",
             marginHorizontal: 24,
           },
         }}>
-        <Text>Remaining Time : {toTimeFormat(timer)}</Text>
         <TouchableOpacity onPress={_onClickNext}>
           <Image
             source={require("../../assets/right-arrow.png")}
@@ -147,6 +256,20 @@ const TriviaQuestionScreen = ({ navigation: { navigate } }) => {
           />
         </TouchableOpacity>
       </View>
+      <View
+        style={{
+          height: 8,
+          flexDirection: "row",
+          width: "100%",
+          backgroundColor: "white",
+        }}>
+        <Animated.View
+          style={
+            ([StyleSheet.absoluteFill], { backgroundColor: "#800080", width })
+          }
+        />
+      </View>
+      {/* footer */}
     </View>
   );
 };
