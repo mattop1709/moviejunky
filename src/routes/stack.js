@@ -20,7 +20,7 @@ const { Navigator, Screen } = createNativeStackNavigator();
 
 const Stack = () => {
   return (
-    <Navigator>
+    <Navigator {...{ screenOptions: { headerShown: false } }}>
       {Object.entries({ ...screens }).map(([name, component]) => (
         <Screen
           {...{
