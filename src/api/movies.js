@@ -48,7 +48,29 @@ export async function fetchMovieDetaild(titleId) {
       return "Error";
     }
 
-    if (response) return response;
+    if (response) {
+      return response;
+    }
+  } catch (error) {
+    /* do something here, prolly proceed to logging activity */
+    return "Error";
+  }
+}
+
+export async function fetchTopMovies() {
+  try {
+    const response = await (
+      await fetch(`${BASE_URL}/Top250Movies/${API_KEY}`, { signal })
+    ).json();
+
+    if (response.items) {
+      return response.items;
+    }
+
+    if (response.errorMessage) {
+      // alert(JSON.stringify(response));
+      return "Error";
+    }
   } catch (error) {
     /* do something here, prolly proceed to logging activity */
     return "Error";
@@ -56,6 +78,7 @@ export async function fetchMovieDetaild(titleId) {
 }
 
 // DUMMY
+// IMPORTANT, for Top 250 => add rank, imDbRating
 // export function fetchMovies(title) {
 //   return new Promise(resolve => {
 //     setTimeout(() => {
