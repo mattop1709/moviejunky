@@ -25,7 +25,9 @@ const TriviaScreen = ({ navigation: { navigate } }) => {
   }
 
   useEffect(() => {
-    if (difficulty !== null) return setDisabled(false);
+    if (difficulty !== null) {
+      return setDisabled(false);
+    }
   }, [difficulty]);
 
   return (
@@ -74,6 +76,7 @@ const TriviaScreen = ({ navigation: { navigate } }) => {
               },
               listItemLabelStyle: {
                 color: "#fff",
+                textAlign: "center",
               },
               modalProps: { animationType: "fade" },
               modalTitle: "Select Trivia Difficulty",
@@ -102,18 +105,3 @@ const TriviaScreen = ({ navigation: { navigate } }) => {
 };
 
 export default TriviaScreen;
-
-// TO BE DELETED
-
-{
-  /* {difficulties.map(option => (
-        <Button
-          key={option}
-          title={option}
-          onPress={() => setDifficulty(option)}
-        />
-      ))} */
-}
-{
-  /* <Button title="Start" onPress={_onInitiateTrivia} disabled={disabled} /> */
-}
