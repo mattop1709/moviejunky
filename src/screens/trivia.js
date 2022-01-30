@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, ImageBackground, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  ImageBackground,
+  TouchableOpacity,
+  Image,
+} from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 import { useDispatch } from "react-redux";
 import { setTriviaDifficulty } from "../redux/trivia";
@@ -36,6 +42,14 @@ const TriviaScreen = ({ navigation: { navigate } }) => {
         source: require("../../assets/trivia.png"),
         style: { height: "100%", width: "100%" },
       }}>
+      <TouchableOpacity
+        style={{ paddingLeft: 24, paddingTop: 24 }}
+        onPress={() => navigate("Home")}>
+        <Image
+          source={require("../../assets/left-arrow.png")}
+          style={{ height: 24, width: 24 }}
+        />
+      </TouchableOpacity>
       <View style={{ flex: 1 }}>
         <View
           {...{
@@ -46,6 +60,26 @@ const TriviaScreen = ({ navigation: { navigate } }) => {
               alignItems: "center",
             },
           }}>
+          <View
+            style={{
+              bottom: 80,
+              height: 120,
+              backgroundColor: "rgba(52, 52, 52, 0.6)",
+              width: "65%",
+              justifyContent: "center",
+              padding: 10,
+              borderRadius: 16,
+            }}>
+            <Text
+              style={{
+                color: "#fff",
+                textAlign: "center",
+                lineHeight: 20,
+              }}>
+              Hello Challenger, {"\n"}you will need to answer all 10 questions
+              related to Movies. Good luck!
+            </Text>
+          </View>
           <DropDownPicker
             {...{
               open: isShown,
