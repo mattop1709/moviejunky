@@ -5,6 +5,7 @@ import Tab from "./tab";
 // import HomeScreen from "../screens/home";
 import HomeScreen from "../screens/home2";
 import DetailsScreen from "../screens/details";
+import TriviaScreen from "../screens/trivia";
 import TriviaQuestionScreen from "../screens/question";
 import TriviaResultScreen from "../screens/result";
 
@@ -15,6 +16,7 @@ const screens = {
   // Movie: Tab,
   Home: HomeScreen,
   Details: DetailsScreen,
+  Trivia: TriviaScreen,
   Question: TriviaQuestionScreen,
   Result: TriviaResultScreen,
 };
