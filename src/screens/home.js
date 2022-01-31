@@ -1,19 +1,23 @@
-import React, { useEffect } from "react";
-import {
+import React, { useEffect, useState, Fragment } from "react";
+import * as UI from "react-native";
+import LinearGradient from "react-native-linear-gradient";
+import { useDispatch, useSelector } from "react-redux";
+import { getTopMovies } from "../redux/movies";
+import { usePagination } from "../hooks/use-pagination";
+
+const {
   ScrollView,
   View,
   Text,
   Image,
   TouchableOpacity,
   ActivityIndicator,
-} from "react-native";
-import LinearGradient from "react-native-linear-gradient";
-import { useDispatch, useSelector } from "react-redux";
-import { getTopMovies } from "../redux/movies";
-import { usePagination } from "../hooks/use-pagination";
+  RefreshControl,
+} = UI;
 
 const HomeScreen = ({ navigation: { navigate } }) => {
   const dispatch = useDispatch();
+  const [isRefresh, setRefresh] = useState(false);
   const { lists, isLoading } = useSelector(state => state.movies);
   const { isPageState, actions, ...others } = usePagination(lists, 8);
 
@@ -25,8 +29,24 @@ const HomeScreen = ({ navigation: { navigate } }) => {
     others.setItemList(lists);
   }, [lists]);
 
+  function _onRetryFetch() {
+    setRefresh(true);
+    dispatch(getTopMovies()).then(() => setRefresh(false));
+  }
+
   return (
-    <ScrollView {...{ style: { flex: 1, backgroundColor: "#fff" } }}>
+    <ScrollView
+      refreshControl={
+        <RefreshControl
+          {...{
+            refreshing: isRefresh,
+            onRefresh: _onRetryFetch,
+            size: "small",
+            tintColor: "#008080",
+          }}
+        />
+      }
+      {...{ style: { flex: 1, backgroundColor: "#fff" } }}>
       {/* backdrop */}
       <LinearGradient
         colors={["#008080", "#385D6D"]}
@@ -58,7 +78,6 @@ const HomeScreen = ({ navigation: { navigate } }) => {
             width: "90%",
             top: 24,
             backgroundColor: "#dcdcdc",
-            borderBottomRightRadius: 16,
           }}>
           {isLoading ? (
             <View
@@ -70,20 +89,19 @@ const HomeScreen = ({ navigation: { navigate } }) => {
               <ActivityIndicator color="#000" />
             </View>
           ) : (
-            <>
+            <Fragment>
+              <Image
+                source={{ uri: lists[3]?.image }}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              />
               <LinearGradient
                 locations={[0, 1.0]}
                 colors={["rgba(0,0,0,0.00)", "rgba(0,0,0,0.90)"]}
                 style={{
                   position: "absolute",
-                  width: "100%",
-                  height: "100%",
-                  borderBottomRightRadius: 16,
-                }}
-              />
-              <Image
-                source={{ uri: lists[3]?.image }}
-                style={{
                   width: "100%",
                   height: "100%",
                 }}
@@ -97,7 +115,7 @@ const HomeScreen = ({ navigation: { navigate } }) => {
                   {lists[3]?.fullTitle}
                 </Text>
               </View>
-            </>
+            </Fragment>
           )}
         </View>
       </View>
