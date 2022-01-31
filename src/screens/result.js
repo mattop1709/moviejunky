@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
+import Trivia from "../utils/trivia";
 
 const TriviaResultScreen = ({
   route: { params },
@@ -8,30 +9,11 @@ const TriviaResultScreen = ({
 }) => {
   const { score } = params;
 
+  const triviaObj = new Trivia([]);
   const ACTUAL_SCORE = score / 10;
 
   function _onProvideVerdict() {
-    let result;
-    if (ACTUAL_SCORE <= 3) {
-      result = {
-        title: "Oh Sorry",
-        icon: require("../../assets/newb.png"),
-        color: "#C83758",
-      };
-    } else if (ACTUAL_SCORE <= 7) {
-      result = {
-        title: "Not Bad",
-        icon: require("../../assets/cat.png"),
-        color: "#E9D816",
-      };
-    } else {
-      result = {
-        title: "Congratz",
-        icon: require("../../assets/trophy.png"),
-        color: "#3EC639",
-      };
-    }
-    return result;
+    return triviaObj.provideVerdict(ACTUAL_SCORE);
   }
 
   return (
@@ -124,9 +106,7 @@ const TriviaResultScreen = ({
             padding: 16,
             borderRadius: 24,
           }}>
-          <Text style={{ textAlign: "center", color: "#fff" }}>
-            Return to Home
-          </Text>
+          <Text style={{ textAlign: "center", color: "#fff" }}>End Trivia</Text>
         </TouchableOpacity>
       </View>
       {/* footer */}

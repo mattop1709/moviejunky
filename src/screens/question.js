@@ -12,6 +12,7 @@ import { getTriviaQuestions, resetTrivia } from "../redux/trivia";
 import { useTimer } from "../hooks/use-timer";
 import { toTimeFormat } from "../utils/convertor";
 import LinearGradient from "react-native-linear-gradient";
+import Trivia from "../utils/trivia";
 
 const TOTAL_QUESTIONS = 10;
 const QUIZ_TIMER = 100;
@@ -27,6 +28,7 @@ const TriviaQuestionScreen = ({ navigation: { navigate } }) => {
   const counter = useRef(new Animated.Value(0)).current;
   const countInterval = useRef(null);
   const [count, setCount] = useState(timer);
+  const triviaObj = new Trivia([]);
 
   const load = count => {
     Animated.timing(counter, {
@@ -67,21 +69,7 @@ const TriviaQuestionScreen = ({ navigation: { navigate } }) => {
   }, [timer]);
 
   function _onHandleText(string) {
-    if (!string) {
-      return;
-    }
-    const char = {
-      "&#039;": "'",
-      "&quot;": '"',
-      "&amp;": "&",
-      "&grave;": "`",
-      "&ldquo;": '"',
-      "&rdquo;": '"',
-    };
-    return string.replace(
-      /&#039;|&quot;|&amp;|&grave;|&ldquo;|&rdquo;/g,
-      symbol => char[symbol],
-    );
+    return triviaObj.handleSymbol(string);
   }
 
   function _onUppercaseLetter(string) {
