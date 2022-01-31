@@ -1,66 +1,37 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import * as UI from "react-native";
-// import { Image } from "react-native-elements";
-import { connect } from "react-redux";
-import { getStore } from "../redux/config";
+import { useDispatch, useSelector } from "react-redux";
 import { getMoviesDetails } from "../redux/movie";
-import { addMovie } from "../redux/favourites";
 import common from "../styles/common";
-import Movie from "../utils/movie";
 
 const { Text, View, ActivityIndicator, ScrollView, TouchableOpacity, Image } =
   UI;
 const controller = new AbortController();
 
-const DetailsScreen = ({
-  route: { params },
-  movie: { data, isLoading, isError },
-  favourites,
-  navigation: { navigate },
-}) => {
-  const [isShow, setShow] = useState(false);
+const DetailsScreen = ({ route: { params }, navigation: { navigate } }) => {
   const { id } = params;
-  const MovieObj = new Movie(favourites);
+  const dispatch = useDispatch();
+  const { data, isLoading, isError } = useSelector(state => state.movie);
   // console.log(data);
 
   useEffect(() => {
-    getStore().dispatch(getMoviesDetails(id));
-    _onFindMovie();
+    dispatch(getMoviesDetails(id));
 
     return () => {
       controller.abort();
     };
   }, []);
 
-  function _onHandleButton() {
-    const { imDbRating, fullTitle, id } = data;
-    const params = { imDbRating, fullTitle, id };
-    // console.log(params);
-    getStore().dispatch(addMovie(params));
-    navigate("Favourite");
-  }
-
-  function _onFindMovie() {
-    /* get the index (if any) for movie inside the favourite basket */
-    const index = MovieObj.checkFavourite(id);
-    // console.log(index);
-    setShow(index === -1 ? true : false);
-  }
-
-  const movieDetails = [
-    { key: "Banner", image: data.image, type: "image" },
-    { key: "Full Title", caption: data.fullTitle, type: "word" },
-    { key: "Tagline", caption: data.tagline || "-", type: "word" },
-    { key: "Type", caption: data.type, type: "word" },
-    { key: "Plot", caption: data.plot || "-", type: "word" },
-    { key: "Duration", caption: data.runtimeStr || "-", type: "word" },
-    { key: "Awards", caption: data.awards || "-", type: "word" },
-    { key: "Directors", caption: data.directors, type: "word" },
-    { key: "Stars", caption: data.stars, type: "word" },
-    { key: "Genres", caption: data.genres, type: "word" },
-    { key: "Companies", caption: data.companies, type: "word" },
-    { key: "Rating", caption: data.imDbRating || "-", type: "word" },
-  ];
+  const movie_information = {
+    header: { key: "Banner", image: data.image },
+    hightlight: [
+      { key: "Rating", caption: data.imDbRating || "N/A" },
+      { key: "Reviews", caption: data.imDbRatingVotes || "N/A" },
+      { key: "Content Rating", caption: data.contentRating || "N/A" },
+    ],
+    body: { key: "Storyline", caption: data.plot || "-" },
+    footer: { key: "Actor List", caption: data.actorList || [] },
+  };
 
   if (isError) {
     return (
@@ -73,44 +44,138 @@ const DetailsScreen = ({
     return <ActivityIndicator {...{ style: { paddingTop: 16 } }} />;
   }
   return (
-    <ScrollView>
-      {movieDetails.map(({ key, caption, image, type }) => {
-        if (type === "image") {
-          return (
-            <Image
+    <ScrollView {...{ style: { backgroundColor: "#fff" } }}>
+      {/* header */}
+      <Image
+        {...{
+          source: { uri: movie_information.header.image },
+          style: common.banner,
+        }}
+      />
+      <TouchableOpacity
+        style={{
+          position: "absolute",
+          backgroundColor: "rgba(52, 52, 52, 0.6)",
+          padding: 16,
+          borderRadius: 150 / 2,
+          left: 16,
+          top: 16,
+        }}
+        onPress={() => navigate("Home")}>
+        <Image
+          source={require("../../assets/left-arrow.png")}
+          style={{ height: 24, width: 24 }}
+        />
+      </TouchableOpacity>
+      {/* header */}
+
+      {/* highlight */}
+      <View {...{ style: { height: 120, alignItems: "center" } }}>
+        <View {...{ style: { flexDirection: "row", height: "100%" } }}>
+          {movie_information.hightlight.map(({ key, caption }) => (
+            <View
               {...{
                 key,
-                source: { uri: image },
-                style: common.banner,
-              }}
-            />
-          );
-        }
+                style: {
+                  width: "30%",
+                  // backgroundColor: "green",
+                  alignItems: "center",
+                  justifyContent: "center",
+                },
+              }}>
+              <Text
+                {...{
+                  style: { fontSize: 12, paddingBottom: 4, color: "#808000" },
+                }}>
+                {key}
+              </Text>
+              <Text style={{ fontSize: 24, color: "#4E4B4E" }}>{caption}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
+      {/* highlight */}
 
-        return (
-          <View {...{ key, style: common.basicLayoutPadding }}>
-            <Text {...{ style: { paddingBottom: 4, color: "#808080" } }}>
-              {key}
-            </Text>
-            <Text {...{ style: { lineHeight: 18 } }}>{caption}</Text>
+      {/* body */}
+      <View {...{ style: { alignItems: "center" } }}>
+        <View {...{ style: { width: "80%", marginBottom: 32 } }}>
+          <Text
+            {...{
+              style: {
+                fontSize: 16,
+                paddingBottom: 16,
+                color: "#808000",
+                fontWeight: "bold",
+              },
+            }}>
+            {movie_information.body.key}
+          </Text>
+          <Text {...{ style: { lineHeight: 20, color: "#4E4B4E" } }}>
+            {movie_information.body.caption}
+          </Text>
+        </View>
+      </View>
+      {/* body */}
+
+      {/* footer */}
+      <View {...{ style: { alignItems: "center" } }}>
+        <View {...{ style: { width: "80%", marginBottom: 32 } }}>
+          <Text
+            {...{
+              style: {
+                fontSize: 16,
+                paddingBottom: 16,
+                color: "#808000",
+                fontWeight: "bold",
+              },
+            }}>
+            {movie_information.footer.key}
+          </Text>
+
+          <View style={{ width: "100%" }}>
+            {movie_information.footer.caption.map(
+              ({ name, image, asCharacter }) => (
+                <View
+                  {...{
+                    key: name,
+                    style: { flexDirection: "row", marginBottom: 16 },
+                  }}>
+                  <Image
+                    source={{ uri: image }}
+                    style={{
+                      height: 80,
+                      width: 80,
+                      borderRadius: 150 / 2,
+                      overflow: "hidden",
+                    }}
+                  />
+                  <View
+                    {...{
+                      style: { flex: 1, justifyContent: "center", left: 24 },
+                    }}>
+                    <Text
+                      {...{
+                        style: {
+                          color: "#008080",
+                          fontWeight: "bold",
+                          paddingBottom: 2,
+                        },
+                      }}>
+                      {name}
+                    </Text>
+                    <Text {...{ style: { color: "#4E4B4E" } }}>
+                      {asCharacter}
+                    </Text>
+                  </View>
+                </View>
+              ),
+            )}
           </View>
-        );
-      })}
-
-      {isShow && (
-        <TouchableOpacity
-          {...{
-            onPress: _onHandleButton,
-            style: common.button,
-          }}>
-          <Text {...{ style: { color: "#fff" } }}>Add To Favourite</Text>
-        </TouchableOpacity>
-      )}
+        </View>
+      </View>
+      {/* footer */}
     </ScrollView>
   );
 };
 
-export default connect(state => ({
-  movie: state.movie,
-  favourites: state.favourites,
-}))(DetailsScreen);
+export default DetailsScreen;

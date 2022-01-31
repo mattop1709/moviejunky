@@ -38,8 +38,10 @@ export default StyleSheet.create({
   },
   banner: {
     width: "100%",
-    height: 240,
-    marginBottom: 24,
+    height: 600,
+    overflow: "hidden",
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
   },
   button: {
     backgroundColor: "#008080",
