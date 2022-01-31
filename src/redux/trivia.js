@@ -22,6 +22,7 @@ export const getTriviaQuestions = () => async (dispatch, getState) => {
 
   if (response.length === 0) {
     dispatch({ type: UPDATE_QUESTIONS_ERROR });
+    alert("Something went wrong");
     return;
   }
 

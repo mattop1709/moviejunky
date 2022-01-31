@@ -5,15 +5,17 @@ import {
   ImageBackground,
   TouchableOpacity,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import { useDispatch } from "react-redux";
-import { setTriviaDifficulty } from "../redux/trivia";
+import { useDispatch, useSelector } from "react-redux";
+import { setTriviaDifficulty, getTriviaQuestions } from "../redux/trivia";
 
 const TriviaScreen = ({ navigation: { navigate } }) => {
   const [difficulty, setDifficulty] = useState(null);
   const [isDisabled, setDisabled] = useState(true);
   const [isShown, setShown] = useState(false);
+  const { isLoading } = useSelector(state => state.trivia);
   const dispatch = useDispatch();
   const difficulties = [
     { label: "Easy", value: "easy" },
@@ -21,8 +23,8 @@ const TriviaScreen = ({ navigation: { navigate } }) => {
     { label: "Hard", value: "hard" },
   ];
 
-  function _onInitiateTrivia() {
-    dispatch(setTriviaDifficulty(difficulty));
+  async function _onInitiateTrivia() {
+    await dispatch(getTriviaQuestions());
     navigate("Question");
     setTimeout(() => {
       setDifficulty(null);
@@ -101,6 +103,7 @@ const TriviaScreen = ({ navigation: { navigate } }) => {
               placeholder: "Pick Level",
               listMode: "MODAL",
               setValue: setDifficulty,
+              onSelectItem: ({ value }) => dispatch(setTriviaDifficulty(value)),
               style: {
                 backgroundColor: "#00B3B3",
                 borderColor: "#00B3B3",
@@ -142,7 +145,11 @@ const TriviaScreen = ({ navigation: { navigate } }) => {
               alignItems: "center",
               borderRadius: 24,
             }}>
-            <Text style={{ color: "#fff" }}>Start Trivia</Text>
+            {isLoading ? (
+              <ActivityIndicator color={"#fff"} size={"small"} />
+            ) : (
+              <Text style={{ color: "#fff", fontSize: 16 }}>Start Trivia</Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
