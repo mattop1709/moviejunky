@@ -12,13 +12,13 @@ const TriviaResultScreen = ({
 
   function _onProvideVerdict() {
     let result;
-    if (ACTUAL_SCORE <= 30) {
+    if (ACTUAL_SCORE <= 3) {
       result = {
         title: "Oh Sorry",
         icon: require("../../assets/newb.png"),
         color: "#C83758",
       };
-    } else if (ACTUAL_SCORE <= 70) {
+    } else if (ACTUAL_SCORE <= 7) {
       result = {
         title: "Not Bad",
         icon: require("../../assets/cat.png"),
@@ -124,7 +124,9 @@ const TriviaResultScreen = ({
             padding: 16,
             borderRadius: 24,
           }}>
-          <Text style={{ textAlign: "center" }}>Return to Home</Text>
+          <Text style={{ textAlign: "center", color: "#fff" }}>
+            Return to Home
+          </Text>
         </TouchableOpacity>
       </View>
       {/* footer */}
