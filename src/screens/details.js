@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import * as UI from "react-native";
-import { Image } from "react-native-elements";
+// import { Image } from "react-native-elements";
 import { connect } from "react-redux";
 import { getStore } from "../redux/config";
 import { getMoviesDetails } from "../redux/movie";
@@ -8,7 +8,8 @@ import { addMovie } from "../redux/favourites";
 import common from "../styles/common";
 import Movie from "../utils/movie";
 
-const { Text, View, ActivityIndicator, ScrollView, TouchableOpacity } = UI;
+const { Text, View, ActivityIndicator, ScrollView, TouchableOpacity, Image } =
+  UI;
 const controller = new AbortController();
 
 const DetailsScreen = ({
@@ -61,14 +62,16 @@ const DetailsScreen = ({
     { key: "Rating", caption: data.imDbRating || "-", type: "word" },
   ];
 
-  if (isError)
+  if (isError) {
     return (
       <Text {...{ style: common.basicCenteredText }}>
         Opps, something went wrong, kindly retry
       </Text>
     );
-  if (isLoading)
+  }
+  if (isLoading) {
     return <ActivityIndicator {...{ style: { paddingTop: 16 } }} />;
+  }
   return (
     <ScrollView>
       {movieDetails.map(({ key, caption, image, type }) => {
@@ -78,7 +81,7 @@ const DetailsScreen = ({
               {...{
                 key,
                 source: { uri: image },
-                containerStyle: common.banner,
+                style: common.banner,
               }}
             />
           );

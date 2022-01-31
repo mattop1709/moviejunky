@@ -58,6 +58,7 @@ const HomeScreen = ({ navigation: { navigate } }) => {
             width: "90%",
             top: 24,
             backgroundColor: "#dcdcdc",
+            borderBottomRightRadius: 16,
           }}>
           {isLoading ? (
             <View
@@ -70,19 +71,19 @@ const HomeScreen = ({ navigation: { navigate } }) => {
             </View>
           ) : (
             <>
-              <Image
-                source={{ uri: lists[3]?.image }}
-                style={{
-                  resizeMode: "cover",
-                  width: "100%",
-                  height: "100%",
-                }}
-              />
               <LinearGradient
                 locations={[0, 1.0]}
                 colors={["rgba(0,0,0,0.00)", "rgba(0,0,0,0.90)"]}
                 style={{
                   position: "absolute",
+                  width: "100%",
+                  height: "100%",
+                  borderBottomRightRadius: 16,
+                }}
+              />
+              <Image
+                source={{ uri: lists[3]?.image }}
+                style={{
                   width: "100%",
                   height: "100%",
                 }}
