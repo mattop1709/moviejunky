@@ -204,7 +204,7 @@ export function fetchTopMovies() {
           imDbRatingCount: "1770460",
         },
       ]);
-    }, 2000);
+    }, 1000);
   });
 }
 
