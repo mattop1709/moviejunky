@@ -40,8 +40,8 @@ export default StyleSheet.create({
     width: "100%",
     height: 600,
     overflow: "hidden",
-    borderBottomLeftRadius: 16,
-    borderBottomRightRadius: 16,
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
   },
   button: {
     backgroundColor: "#008080",

@@ -43,13 +43,25 @@ const TriviaScreen = ({ navigation: { navigate } }) => {
         style: { height: "100%", width: "100%" },
       }}>
       <TouchableOpacity
-        style={{ paddingLeft: 24, paddingTop: 24 }}
+        style={{ paddingLeft: 36, paddingTop: 36 }}
         onPress={() => navigate("Home")}>
+        <View
+          {...{
+            style: {
+              position: "absolute",
+              backgroundColor: "rgba(52, 52, 52, 0.9)",
+              padding: 32,
+              borderRadius: 150 / 2,
+              marginLeft: 16,
+              marginTop: 16,
+            },
+          }}></View>
         <Image
           source={require("../../assets/left-arrow.png")}
           style={{ height: 24, width: 24 }}
         />
       </TouchableOpacity>
+
       <View style={{ flex: 1 }}>
         <View
           {...{

@@ -50,7 +50,7 @@ const HomeScreen = ({ navigation: { navigate } }) => {
         }}>
         <Image
           source={require("../../assets/logo.png")}
-          style={{ height: 32, width: 56 }}
+          style={{ height: 40, width: 80 }}
         />
         <View
           style={{
