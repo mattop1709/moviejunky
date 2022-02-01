@@ -65,7 +65,7 @@ const DetailsScreen = ({ route: { params }, navigation: { navigate } }) => {
           {...{
             refreshing: isLoading,
             onRefresh: () => dispatch(getMoviesDetails(id)),
-            size: "small",
+            size: "default",
             tintColor: color.primary,
           }}
         />

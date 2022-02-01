@@ -37,7 +37,7 @@ const HomeScreen = ({ navigation: { navigate } }) => {
           {...{
             refreshing: isRefresh,
             onRefresh: _onRetryFetch,
-            size: "small",
+            size: "default",
             tintColor: color.tertiary,
           }}
         />
