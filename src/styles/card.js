@@ -15,4 +15,19 @@ export default StyleSheet.create({
     padding: 24,
     backgroundColor: "#fff",
   },
+  question: {
+    backgroundColor: "#fff",
+    paddingHorizontal: 16,
+    marginHorizontal: 24,
+    height: "80%",
+    borderRadius: 8,
+    justifyContent: "center",
+  },
+  result: {
+    backgroundColor: "#fff",
+    paddingHorizontal: 16,
+    marginHorizontal: 24,
+    height: "80%",
+    borderRadius: 8,
+  },
 });

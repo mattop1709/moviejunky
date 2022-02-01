@@ -1,21 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  Animated,
-} from "react-native";
+import * as UI from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { getTriviaQuestions, resetTrivia } from "../redux/trivia";
 import { useTimer } from "../hooks/use-timer";
 import { toTimeFormat } from "../utils/convertor";
-import LinearGradient from "react-native-linear-gradient";
 import Trivia from "../utils/trivia";
+import icon from "../styles/icon";
+import common from "../styles/common";
+import color from "../styles/color";
 
-const TOTAL_QUESTIONS = 10;
-const QUIZ_TIMER = 100;
+import GradientLayout from "../components/gradientLayout";
+import QuestionCard from "../components/questionCard";
+import container from "../styles/container";
+
+const { View, TouchableOpacity, Image, StyleSheet, Animated } = UI;
+const [TOTAL_QUESTIONS, QUIZ_TIMER] = [10, 100];
 
 const TriviaQuestionScreen = ({ navigation: { navigate } }) => {
   const dispatch = useDispatch();
@@ -45,7 +44,7 @@ const TriviaQuestionScreen = ({ navigation: { navigate } }) => {
   });
 
   useEffect(() => {
-    dispatch(getTriviaQuestions());
+    if (data.length === 0) dispatch(getTriviaQuestions());
     countInterval.current = setInterval(() => setCount(old => old - 1), 1000);
     return () => {
       clearInterval(countInterval);
@@ -107,167 +106,55 @@ const TriviaQuestionScreen = ({ navigation: { navigate } }) => {
   }
 
   return (
-    <LinearGradient
-      colors={["#008080", "#385D6D"]}
-      {...{
-        style: { flex: 1, borderRadius: 5 },
-      }}>
-      {/* header */}
-      <View style={{ height: "5%", width: "100%", alignItems: "flex-end" }}>
+    <GradientLayout>
+      <View {...{ style: container.questionHeader }}>
         <TouchableOpacity
-          style={{
-            paddingRight: 24,
-            paddingTop: 24,
-          }}
-          onPress={_onCancelTrivia}>
+          {...{
+            style: common.basicPaddingHeaderRight,
+            onPress: _onCancelTrivia,
+          }}>
           <Image
-            source={require("../../assets/home-white.png")}
-            style={{ height: 24, width: 24 }}
+            {...{
+              style: icon.questionHeader,
+              source: require("../../assets/home-white.png"),
+            }}
           />
         </TouchableOpacity>
       </View>
-      {/* header */}
 
-      {/* body */}
-
-      <View
+      <QuestionCard
         {...{
-          style: {
-            height: "85%",
-            justifyContent: "center",
-          },
-        }}>
-        <View
-          style={{
-            backgroundColor: "#fff",
-            paddingHorizontal: 16,
-            marginHorizontal: 24,
-            height: "80%",
-            borderRadius: 8,
-            justifyContent: "center",
-          }}>
-          {/* info */}
-          <View style={{ flex: 0.3 }}>
-            <View style={{ flex: 4 }}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  top: 8,
-                  flex: 0.3,
-                  backgroundColor: "",
-                }}>
-                <Text style={{ color: "#7D8182" }}>
-                  Score {_onHandleResult()}
-                </Text>
-                <Text style={{ color: "#7D8182" }}>
-                  {_onUppercaseLetter(others.difficulty)}
-                </Text>
-              </View>
-              <View
-                style={{
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flex: 0.7,
-                }}>
-                <View
-                  style={{
-                    backgroundColor: "#808000",
-                    padding: 8,
-                    borderRadius: 16,
-                  }}>
-                  <Text>Question {questionNumber + 1}</Text>
-                </View>
-              </View>
-            </View>
-            <View style={{ flex: 6, justifyContent: "center" }}>
-              <Text
-                style={{
-                  textAlign: "center",
-                  fontWeight: "bold",
-                  color: "#4E4B4E",
-                  fontSize: 16,
-                }}>
-                {_onHandleText(data[questionNumber]?.question) ?? ""}
-              </Text>
-            </View>
-          </View>
-          {/* info */}
+          timer: toTimeFormat(timer),
+          questionNumber,
+          result: _onHandleResult(),
+          difficulty: _onUppercaseLetter(others.difficulty),
+          question: _onHandleText(data[questionNumber]?.question) ?? "",
+          answers: data[questionNumber]?.answers,
+          method: _onSelectAnswer,
+          handleText: _onHandleText,
+          isDisabled: disabled,
+        }}
+      />
 
-          {/* question */}
-          <View style={{ flex: 0.6, justifyContent: "center" }}>
-            {data[questionNumber]?.answers.map(answer => (
-              <TouchableOpacity
-                key={answer}
-                style={{
-                  borderWidth: 1,
-                  borderColor: "#00B3B3",
-                  height: 56,
-                  marginTop: 16,
-                  padding: 16,
-                  borderRadius: 24,
-                  justifyContent: "center",
-                }}
-                onPress={() => _onSelectAnswer(answer)}>
-                <Text
-                  style={{ textAlign: "center", color: "#4E4B4E" }}
-                  disabled={disabled}>
-                  {_onHandleText(answer)}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </View>
-          {/* question */}
-
-          {/* timer */}
-          <View
-            style={{
-              flex: 0.1,
-              justifyContent: "center",
-              alignItems: "center",
-            }}>
-            <Text style={{ color: "#BB6844" }}>
-              Remaining Time : {toTimeFormat(timer)}
-            </Text>
-          </View>
-
-          {/* timer */}
-        </View>
-      </View>
-      {/* body */}
-
-      {/* footer */}
-      <View
-        {...{
-          style: {
-            height: "10%",
-            flex: 1,
-            alignItems: "center",
-            marginHorizontal: 24,
-          },
-        }}>
+      <View {...{ style: container.questionFooter }}>
         <TouchableOpacity onPress={_onClickNext}>
           <Image
-            source={require("../../assets/right-arrow.png")}
-            style={{ height: 40, width: 40 }}
+            {...{
+              style: icon.questionNext,
+              source: require("../../assets/right-arrow.png"),
+            }}
           />
         </TouchableOpacity>
       </View>
-      <View
-        style={{
-          height: 8,
-          flexDirection: "row",
-          width: "100%",
-          backgroundColor: "white",
-        }}>
+      <View {...{ style: container.progressBar }}>
         <Animated.View
           style={
-            ([StyleSheet.absoluteFill], { backgroundColor: "#800080", width })
+            ([StyleSheet.absoluteFill],
+            { backgroundColor: color.tertiary, width })
           }
         />
       </View>
-      {/* footer */}
-    </LinearGradient>
+    </GradientLayout>
   );
 };
 

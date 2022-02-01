@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  ImageBackground,
-  TouchableOpacity,
-  Image,
-  ActivityIndicator,
-} from "react-native";
-import DropDownPicker from "react-native-dropdown-picker";
+import { View, TouchableOpacity, Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { setTriviaDifficulty, getTriviaQuestions } from "../redux/trivia";
+import ImageLayout from "../components/imageLayout";
+import QuizIntro from "../components/quizIntro";
+import TextButton from "../components/textButton";
+import DifficultyPicker from "../components/difficultyPicker";
+import container from "../styles/container";
+import icon from "../styles/icon";
+import button from "../styles/button";
+import common from "../styles/common";
 
 const TriviaScreen = ({ navigation: { navigate } }) => {
   const [difficulty, setDifficulty] = useState(null);
@@ -17,11 +17,6 @@ const TriviaScreen = ({ navigation: { navigate } }) => {
   const [isShown, setShown] = useState(false);
   const { isLoading } = useSelector(state => state.trivia);
   const dispatch = useDispatch();
-  const difficulties = [
-    { label: "Easy", value: "easy" },
-    { label: "Medium", value: "medium" },
-    { label: "Hard", value: "hard" },
-  ];
 
   async function _onInitiateTrivia() {
     await dispatch(getTriviaQuestions());
@@ -39,121 +34,44 @@ const TriviaScreen = ({ navigation: { navigate } }) => {
   }, [difficulty]);
 
   return (
-    <ImageBackground
-      {...{
-        source: require("../../assets/trivia.png"),
-        style: { height: "100%", width: "100%" },
-      }}>
+    <ImageLayout>
       <TouchableOpacity
-        style={{ paddingLeft: 36, paddingTop: 36 }}
-        onPress={() => navigate("Home")}>
-        <View
-          {...{
-            style: {
-              position: "absolute",
-              backgroundColor: "rgba(52, 52, 52, 0.9)",
-              padding: 32,
-              borderRadius: 150 / 2,
-              marginLeft: 16,
-              marginTop: 16,
-            },
-          }}></View>
+        {...{
+          style: common.basicPaddingHeader,
+          onPress: () => navigate("Home"),
+        }}>
+        <View {...{ style: button.triviaShadow }} />
         <Image
-          source={require("../../assets/left-arrow.png")}
-          style={{ height: 24, width: 24 }}
+          {...{
+            style: icon.triviaBack,
+            source: require("../../assets/left-arrow.png"),
+          }}
         />
       </TouchableOpacity>
 
       <View style={{ flex: 1 }}>
-        <View
-          {...{
-            style: {
-              position: "absolute",
-              bottom: 40,
-              width: "100%",
-              alignItems: "center",
-            },
-          }}>
-          <View
-            style={{
-              bottom: 80,
-              height: 120,
-              backgroundColor: "rgba(52, 52, 52, 0.6)",
-              width: "65%",
-              justifyContent: "center",
-              padding: 10,
-              borderRadius: 16,
-            }}>
-            <Text
-              style={{
-                color: "#fff",
-                textAlign: "center",
-                lineHeight: 20,
-              }}>
-              Hello Challenger, {"\n"}you will need to answer all 10 questions
-              related to Movies. Good luck!
-            </Text>
-          </View>
-          <DropDownPicker
+        <View {...{ style: container.triviaFooter }}>
+          <QuizIntro />
+          <DifficultyPicker
             {...{
-              open: isShown,
-              value: difficulty,
-              setOpen: setShown,
-              items: difficulties,
-              placeholder: "Pick Level",
-              listMode: "MODAL",
-              setValue: setDifficulty,
-              onSelectItem: ({ value }) => dispatch(setTriviaDifficulty(value)),
-              style: {
-                backgroundColor: "#00B3B3",
-                borderColor: "#00B3B3",
-                borderRadius: 24,
-              },
-              placeholderStyle: {
-                color: "#fff",
-              },
-              containerStyle: {
-                width: "32%",
-                bottom: 16,
-              },
-              listItemContainerStyle: {
-                backgroundColor: "#008080",
-                marginTop: 16,
-                marginHorizontal: 16,
-                borderRadius: 24,
-                height: 48,
-              },
-              listItemLabelStyle: {
-                color: "#fff",
-                textAlign: "center",
-              },
-              modalProps: { animationType: "fade" },
-              modalTitle: "Select Trivia Difficulty",
-              customItemLabelStyle: {
-                fontStyle: "italic",
-              },
+              isShown,
+              setShown,
+              difficulty,
+              setDifficulty,
+              method: ({ value }) => dispatch(setTriviaDifficulty(value)),
             }}
           />
-
-          <TouchableOpacity
-            onPress={_onInitiateTrivia}
-            disabled={isDisabled}
-            style={{
-              backgroundColor: "#808000",
-              width: "50%",
-              padding: 16,
-              alignItems: "center",
-              borderRadius: 24,
-            }}>
-            {isLoading ? (
-              <ActivityIndicator color={"#fff"} size={"small"} />
-            ) : (
-              <Text style={{ color: "#fff", fontSize: 16 }}>Start Trivia</Text>
-            )}
-          </TouchableOpacity>
+          <TextButton
+            {...{
+              isDisabled,
+              isLoading,
+              method: _onInitiateTrivia,
+              caption: "Start Trivia",
+            }}
+          />
         </View>
       </View>
-    </ImageBackground>
+    </ImageLayout>
   );
 };
 

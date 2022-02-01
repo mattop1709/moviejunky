@@ -28,7 +28,7 @@ const DetailsScreen = ({ route: { params }, navigation: { navigate } }) => {
       { key: "Reviews", caption: data.imDbRatingVotes || "N/A" },
       { key: "Content Rating", caption: data.contentRating || "N/A" },
     ],
-    body: { key: "Storyline", caption: data.plot || "-" },
+    body: { key: "Storyline", caption: data.plot || "N/A" },
     footer: { key: "Actor List", caption: data.actorList || [] },
   };
 

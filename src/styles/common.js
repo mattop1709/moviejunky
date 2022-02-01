@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import color from "./color";
 
 const baseStyle = {
   flex: 1,
@@ -49,5 +50,27 @@ export default StyleSheet.create({
     margin: 8,
     alignItems: "center",
     borderRadius: 4,
+  },
+  basicPaddingHeader: {
+    paddingLeft: 36,
+    paddingTop: 36,
+  },
+  basicPaddingHeaderRight: {
+    paddingRight: 24,
+    paddingTop: 24,
+  },
+  quizIntro: {
+    bottom: 80,
+    height: 120,
+    backgroundColor: "rgba(52, 52, 52, 0.6)",
+    width: "65%",
+    justifyContent: "center",
+    padding: 10,
+    borderRadius: 16,
+  },
+  quizQuestion: {
+    backgroundColor: color.secondary,
+    padding: 8,
+    borderRadius: 16,
   },
 });
