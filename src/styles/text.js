@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 import color from "./color";
 
+const FOOTNOTE = 12;
 const TITLE = 16;
 const SUB_HEADLINE = 24;
 const HEADLINE = 40;
@@ -41,5 +42,39 @@ export default StyleSheet.create({
     fontWeight: "bold",
     color: color.black,
     fontSize: TITLE,
+  },
+  bannerTitle: {
+    color: color.white,
+    fontSize: TITLE,
+    fontWeight: "bold",
+  },
+  bannerHeader: {
+    color: color.lightPrimary,
+    fontWeight: "bold",
+  },
+  pagination: {
+    fontSize: FOOTNOTE,
+    top: 2,
+    color: color.primary,
+  },
+  movieHighlight: {
+    fontSize: 12,
+    paddingBottom: 4,
+    color: color.secondary,
+  },
+  movieHighlightDetails: {
+    fontSize: SUB_HEADLINE,
+    color: color.black,
+  },
+  movieHighlightTitle: {
+    fontSize: TITLE,
+    paddingBottom: 16,
+    color: color.secondary,
+    fontWeight: "bold",
+  },
+  avatar: {
+    color: color.primary,
+    fontWeight: "bold",
+    paddingBottom: 2,
   },
 });

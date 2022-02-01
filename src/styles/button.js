@@ -31,4 +31,21 @@ export default StyleSheet.create({
     borderRadius: 24,
     justifyContent: "center",
   },
+  triviaCard: {
+    flexDirection: "row",
+    width: "90%",
+    justifyContent: "space-between",
+    borderWidth: 1,
+    borderColor: color.tertiary,
+    padding: 16,
+    borderRadius: 8,
+  },
+  movieHighlight: {
+    position: "absolute",
+    backgroundColor: "rgba(52, 52, 52, 0.6)",
+    padding: 16,
+    borderRadius: 150 / 2,
+    left: 16,
+    top: 16,
+  },
 });

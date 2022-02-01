@@ -2,7 +2,15 @@ import React, { useEffect, Fragment } from "react";
 import * as UI from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getMoviesDetails } from "../redux/movie";
+import Avatar from "../components/avatar";
 import common from "../styles/common";
+import color from "../styles/color";
+import container from "../styles/container";
+import text from "../styles/text";
+import card from "../styles/card";
+import button from "../styles/button";
+import icon from "../styles/icon";
+import image from "../styles/image";
 
 const { Text, View, ScrollView, TouchableOpacity, Image, RefreshControl } = UI;
 const controller = new AbortController();
@@ -40,6 +48,16 @@ const DetailsScreen = ({ route: { params }, navigation: { navigate } }) => {
     );
   }
 
+  if (isLoading) {
+    return (
+      <UI.ActivityIndicator
+        color={color.primary}
+        size="large"
+        style={common.flexCenter}
+      />
+    );
+  }
+
   return (
     <ScrollView
       refreshControl={
@@ -48,11 +66,11 @@ const DetailsScreen = ({ route: { params }, navigation: { navigate } }) => {
             refreshing: isLoading,
             onRefresh: () => dispatch(getMoviesDetails(id)),
             size: "small",
-            tintColor: "#008080",
+            tintColor: color.primary,
           }}
         />
       }
-      {...{ style: { backgroundColor: "#fff" } }}>
+      {...{ style: { backgroundColor: color.white } }}>
       {!isLoading && (
         <Fragment>
           {/* header */}
@@ -63,47 +81,22 @@ const DetailsScreen = ({ route: { params }, navigation: { navigate } }) => {
             }}
           />
           <TouchableOpacity
-            style={{
-              position: "absolute",
-              backgroundColor: "rgba(52, 52, 52, 0.6)",
-              padding: 16,
-              borderRadius: 150 / 2,
-              left: 16,
-              top: 16,
-            }}
+            style={button.movieHighlight}
             onPress={() => navigate("Home")}>
             <Image
               source={require("../../assets/left-arrow.png")}
-              style={{ height: 24, width: 24 }}
+              style={icon.triviaBack}
             />
           </TouchableOpacity>
           {/* header */}
 
           {/* highlight */}
-          <View {...{ style: { height: 120, alignItems: "center" } }}>
+          <View {...{ style: container.movieHighlight }}>
             <View {...{ style: { flexDirection: "row", height: "100%" } }}>
               {movie_information.hightlight.map(({ key, caption }) => (
-                <View
-                  {...{
-                    key,
-                    style: {
-                      width: "30%",
-                      // backgroundColor: "green",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    },
-                  }}>
-                  <Text
-                    {...{
-                      style: {
-                        fontSize: 12,
-                        paddingBottom: 4,
-                        color: "#808000",
-                      },
-                    }}>
-                    {key}
-                  </Text>
-                  <Text style={{ fontSize: 24, color: "#4E4B4E" }}>
+                <View {...{ key, style: card.movieHighlight }}>
+                  <Text {...{ style: text.movieHighlight }}>{key}</Text>
+                  <Text {...{ style: text.movieHighlightDetails }}>
                     {caption}
                   </Text>
                 </View>
@@ -114,19 +107,12 @@ const DetailsScreen = ({ route: { params }, navigation: { navigate } }) => {
 
           {/* body */}
           <View {...{ style: { alignItems: "center" } }}>
-            <View {...{ style: { width: "80%", marginBottom: 32 } }}>
-              <Text
-                {...{
-                  style: {
-                    fontSize: 16,
-                    paddingBottom: 16,
-                    color: "#808000",
-                    fontWeight: "bold",
-                  },
-                }}>
+            <View {...{ style: container.movieDetails }}>
+              <Text {...{ style: text.movieHighlightTitle }}>
                 {movie_information.body.key}
               </Text>
-              <Text {...{ style: { lineHeight: 20, color: "#4E4B4E" } }}>
+              <Text
+                {...{ style: { ...text.verdictSubTitle, textAlign: "left" } }}>
                 {movie_information.body.caption}
               </Text>
             </View>
@@ -135,59 +121,15 @@ const DetailsScreen = ({ route: { params }, navigation: { navigate } }) => {
 
           {/* footer */}
           <View {...{ style: { alignItems: "center" } }}>
-            <View {...{ style: { width: "80%", marginBottom: 32 } }}>
-              <Text
-                {...{
-                  style: {
-                    fontSize: 16,
-                    paddingBottom: 16,
-                    color: "#808000",
-                    fontWeight: "bold",
-                  },
-                }}>
+            <View {...{ style: container.movieDetails }}>
+              <Text {...{ style: text.movieHighlightTitle }}>
                 {movie_information.footer.key}
               </Text>
 
               <View style={{ width: "100%" }}>
                 {movie_information.footer.caption.map(
                   ({ name, image, asCharacter }) => (
-                    <View
-                      {...{
-                        key: name,
-                        style: { flexDirection: "row", marginBottom: 16 },
-                      }}>
-                      <Image
-                        source={{ uri: image }}
-                        style={{
-                          height: 80,
-                          width: 80,
-                          borderRadius: 150 / 2,
-                          overflow: "hidden",
-                        }}
-                      />
-                      <View
-                        {...{
-                          style: {
-                            flex: 1,
-                            justifyContent: "center",
-                            left: 24,
-                          },
-                        }}>
-                        <Text
-                          {...{
-                            style: {
-                              color: "#008080",
-                              fontWeight: "bold",
-                              paddingBottom: 2,
-                            },
-                          }}>
-                          {name}
-                        </Text>
-                        <Text {...{ style: { color: "#4E4B4E" } }}>
-                          {asCharacter}
-                        </Text>
-                      </View>
-                    </View>
+                    <Avatar {...{ key: name, name, image, asCharacter }} />
                   ),
                 )}
               </View>

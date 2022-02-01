@@ -27,6 +27,11 @@ export default StyleSheet.create({
     paddingBottom: 24,
     paddingHorizontal: 24,
   },
+  basicPaddingBottomLeft: {
+    position: "absolute",
+    bottom: 8,
+    left: 8,
+  },
   wrapContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
@@ -43,6 +48,13 @@ export default StyleSheet.create({
     overflow: "hidden",
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
+  },
+  backdrop: {
+    position: "absolute",
+    height: 210,
+    width: "100%",
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
   },
   button: {
     backgroundColor: "#008080",
@@ -72,5 +84,11 @@ export default StyleSheet.create({
     backgroundColor: color.secondary,
     padding: 8,
     borderRadius: 16,
+  },
+  topMovie: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginHorizontal: 24,
+    paddingTop: 16,
   },
 });

@@ -88,4 +88,45 @@ export default StyleSheet.create({
     borderRadius: 24,
     height: 48,
   },
+  homeTrivia: {
+    height: 100,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  banner: {
+    height: 340,
+    top: 24,
+    alignItems: "center",
+  },
+  bannerFrame: {
+    height: 240,
+    width: "90%",
+    top: 16,
+    backgroundColor: "#dcdcdc",
+  },
+  topMovies: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    width: "90%",
+    justifyContent: "space-between",
+  },
+  paginationButton: {
+    flexDirection: "row",
+    width: "90%",
+    justifyContent: "space-between",
+    marginVertical: 32,
+  },
+  movieHighlight: {
+    height: 120,
+    alignItems: "center",
+  },
+  movieDetails: {
+    width: "80%",
+    marginBottom: 32,
+  },
+  avatar: {
+    flex: 1,
+    justifyContent: "center",
+    left: 24,
+  },
 });

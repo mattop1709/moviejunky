@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import color from "./color";
 
 export default StyleSheet.create({
   movie: {
@@ -29,5 +30,20 @@ export default StyleSheet.create({
     marginHorizontal: 24,
     height: "80%",
     borderRadius: 8,
+  },
+  bannerDefault: {
+    height: 240,
+    width: "90%",
+    top: 16,
+    backgroundColor: color.grey,
+  },
+  topMovie: {
+    width: "47%",
+    marginTop: 16,
+  },
+  movieHighlight: {
+    width: "30%",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
